@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "fuentio": {
+      "url": "https://api.fuentio.com/mcp"
+    }
+  }
+}
