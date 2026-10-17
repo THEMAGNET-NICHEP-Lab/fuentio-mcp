@@ -1,7 +1,7 @@
 {
   "name": "fuentio",
-  "version": "1.0.0",
-  "description": "Official company checks for France and Spain, for AI agents",
+  "version": "1.1.0",
+  "description": "Official UK, France and Spain company checks for AI agents",
   "mcpServers": {
     "fuentio": {
       "httpUrl": "https://api.fuentio.com/mcp"

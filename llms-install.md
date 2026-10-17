@@ -25,8 +25,8 @@ URL to the client's MCP settings.
    ```
 
 3. Save. The client connects and lists the tools.
-4. Check it works: call `list_coverage` (free, no key). It returns the covered countries (France
-   and Spain), the ID formats and the official sources.
+4. Check it works: call `list_coverage` (free, no key). It returns the covered countries (the
+   United Kingdom, France and Spain), the ID formats and the official sources.
 
 ## Optional: an API key
 
