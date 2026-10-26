@@ -1,0 +1,108 @@
+identity:
+  name: verify_company
+  author: fuentio
+  label:
+    en_US: Verify a company (registry check)
+description:
+  human:
+    en_US: Verify a company against its official register before onboarding, paying or
+      signing. An outcome with reasons and a proof code. A registry check, not full KYB.
+  llm: >-
+    Verify a company against its official register, for onboarding or before paying or
+    signing: an outcome with reasons, checks, warning signals and a proof code you can show an
+    auditor. A registry check, not full KYB, UBO proof or sanctions clearance. Use it to decide
+    about a company. Don't use it for a cheap single read (lookup_company) or with a name (call
+    search_companies first). Returns: outcome (verified, partial, unverified; an open
+    insolvency is never verified) and reasons, checks, signals (present, none_found,
+    not_covered), recent changes, provenance and a proof code (FUE-…). Costs 5 units (1 if not
+    found). Stored 24 months. France: insolvency from BODACC since 2008. Spain: BORME acts since
+    2 January 2009. UK: no officers or PSCs. No person's name in any answer.
+parameters:
+  - name: country
+    type: select
+    required: true
+    form: llm
+    label:
+      en_US: Country
+    human_description:
+      en_US: FR (France), GB (United Kingdom) or ES (Spain).
+    llm_description: "ISO country code: FR or GB or ES."
+    options:
+      - value: FR
+        label:
+          en_US: France
+      - value: GB
+        label:
+          en_US: United Kingdom
+      - value: ES
+        label:
+          en_US: Spain
+  - name: identifier
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Official ID
+    human_description:
+      en_US: SIREN or SIRET (France), company number (UK), Registro Mercantil sheet (Spain).
+    llm_description: >-
+      Official ID: FR SIREN or SIRET; ES Registro Mercantil sheet from search_companies; GB
+      Companies House company number, e.g. 00445790. Never a name.
+  - name: id_scheme
+    type: select
+    required: false
+    form: llm
+    label:
+      en_US: ID type
+    human_description:
+      en_US: Optional. Force the ID type.
+    llm_description: Optional. Force the ID type.
+    options:
+      - value: FR_SIREN
+        label:
+          en_US: SIREN (France)
+      - value: FR_SIRET
+        label:
+          en_US: SIRET (France)
+      - value: EU_VAT
+        label:
+          en_US: EU VAT number (France)
+      - value: LEI
+        label:
+          en_US: LEI
+      - value: GB_COMPANY_NUMBER
+        label:
+          en_US: Company number (UK)
+      - value: ES_RM_HOJA
+        label:
+          en_US: Registro Mercantil sheet (Spain)
+  - name: reference
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Your reference
+    human_description:
+      en_US: Optional. Your own case id, stored with the result. Don't put personal data in it.
+    llm_description: Optional. Your own case id (max 200 characters), stored with the result.
+output_schema:
+  type: object
+  properties:
+    outcome:
+      type: string
+      description: verified, partial or unverified (an open insolvency is never verified).
+    reasons:
+      type: string
+      description: The outcome's reasons, comma-separated (e.g. company_active).
+    proof_code:
+      type: string
+      description: The proof code (FUE-…), stored 24 months.
+    company_name:
+      type: string
+      description: The company's name as the register holds it.
+    checked_at:
+      type: string
+      description: When the check ran (ISO 8601).
+extra:
+  python:
+    source: tools/verify_company.py

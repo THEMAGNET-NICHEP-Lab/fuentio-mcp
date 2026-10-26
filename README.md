@@ -121,9 +121,16 @@ paragraph with the outcome, source, check date and receipt.
 - No beneficial owners and no credit scores.
 - Fuentio does not check VAT registration: `check_vat` gives the number and links VIES.
 
+## Dify plugin
+
+[`dify-plugin/`](dify-plugin/) holds the Fuentio tool plugin for [Dify](https://dify.ai): search,
+look up and verify companies, insolvency notices and company history, with your own Fuentio API
+key. See [`dify-plugin/README.md`](dify-plugin/README.md).
+
 ## Licence
 
-The documentation and install snippets in this repository are MIT-licensed. The Fuentio service
+The documentation, install snippets and the Dify plugin code in this repository are
+MIT-licensed. The Fuentio service
 and its data are governed by the terms at https://fuentio.com and the sources' licences above.
 
 Contact: hello@fuentio.com

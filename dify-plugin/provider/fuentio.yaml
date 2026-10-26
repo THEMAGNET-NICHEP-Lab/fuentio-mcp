@@ -1,0 +1,34 @@
+identity:
+  author: fuentio
+  name: fuentio
+  label:
+    en_US: Fuentio
+  description:
+    en_US: Company checks in official registers (France, United Kingdom, Spain), each answer
+      with its official source and check date. A registry check, not full KYB, UBO proof or
+      sanctions clearance.
+  icon: icon.png
+  tags:
+    - business
+    - search
+credentials_for_provider:
+  fuentio_api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Fuentio API key
+    placeholder:
+      en_US: Your Fuentio API key (sk_live_…)
+    help:
+      en_US: Use your own key. A free key (100 units a month) takes a minute at fuentio.com;
+        paid plans add units. Calls are charged to this key.
+    url: https://fuentio.com/pricing/
+tools:
+  - tools/search_companies.yaml
+  - tools/lookup_company.yaml
+  - tools/verify_company.yaml
+  - tools/check_insolvency.yaml
+  - tools/get_company_history.yaml
+extra:
+  python:
+    source: provider/fuentio.py

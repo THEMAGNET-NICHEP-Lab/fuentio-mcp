@@ -1,0 +1,100 @@
+identity:
+  name: lookup_company
+  author: fuentio
+  label:
+    en_US: Look up a company by official ID
+description:
+  human:
+    en_US: >-
+      Look up one company in its official register by ID: status, address, legal form,
+      activity, source and check date.
+  llm: >-
+    Look up one company in its official register by ID: status, address, legal form, activity,
+    source and check date. Use it when you have an official ID. Don't use it with a name: call
+    search_companies first. Identifiers: FR SIREN 441639465, SIRET 44163946500091, VAT
+    FR63441639465, LEI 969500F7JLTX36OUI695; ES Registro Mercantil sheet VI-23266, LEI (no
+    NIF/CIF); GB company number 00445790, LEI. Returns: the record, with meta.source,
+    meta.last_verified_at and the source URL. Costs 1 unit (also for a valid ID not found).
+    France: insolvency from BODACC since 2008. Spain: BORME acts since 2 January 2009. UK: no
+    officers or PSCs. No person's name in any answer.
+parameters:
+  - name: country
+    type: select
+    required: true
+    form: llm
+    label:
+      en_US: Country
+    human_description:
+      en_US: FR (France), GB (United Kingdom) or ES (Spain).
+    llm_description: "ISO country code: FR or GB or ES."
+    options:
+      - value: FR
+        label:
+          en_US: France
+      - value: GB
+        label:
+          en_US: United Kingdom
+      - value: ES
+        label:
+          en_US: Spain
+  - name: identifier
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Official ID
+    human_description:
+      en_US: SIREN, SIRET or VAT (France), company number (UK), Registro Mercantil sheet (Spain),
+        or an LEI.
+    llm_description: >-
+      Official ID. FR: SIREN (9 digits), SIRET (14) or VAT (FR + 11). ES: Registro Mercantil
+      sheet, e.g. VI-23266. GB: Companies House company number, e.g. 00445790. Never a name.
+  - name: id_scheme
+    type: select
+    required: false
+    form: llm
+    label:
+      en_US: ID type
+    human_description:
+      en_US: Optional. Force the ID type when it is ambiguous.
+    llm_description: Optional. Force the ID type when it is ambiguous.
+    options:
+      - value: FR_SIREN
+        label:
+          en_US: SIREN (France)
+      - value: FR_SIRET
+        label:
+          en_US: SIRET (France)
+      - value: EU_VAT
+        label:
+          en_US: EU VAT number (France)
+      - value: LEI
+        label:
+          en_US: LEI
+      - value: GB_COMPANY_NUMBER
+        label:
+          en_US: Company number (UK)
+      - value: ES_RM_HOJA
+        label:
+          en_US: Registro Mercantil sheet (Spain)
+output_schema:
+  type: object
+  properties:
+    company_name:
+      type: string
+      description: The company's name as the register holds it.
+    official_id:
+      type: string
+      description: The company's primary official ID.
+    status:
+      type: string
+      description: active, inactive, in_liquidation, dissolved, struck_off or unknown.
+    source:
+      type: string
+      description: The official source the answer rests on.
+    checked_at:
+      type: string
+      description: When Fuentio last checked the source (ISO 8601).
+extra:
+  python:
+    source: tools/lookup_company.py

@@ -1,0 +1,19 @@
+# not shipped in the package (Marketplace: runtime files only)
+.env
+.env.*
+.git/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.idea/
+.vscode/
+tests/
+*.difypkg
+.DS_Store
+ruff.toml
+.difyignore
+.gitignore

@@ -1,0 +1,88 @@
+identity:
+  name: get_company_history
+  author: fuentio
+  label:
+    en_US: See what changed at a company
+description:
+  human:
+    en_US: What changed at a company, and when (address, status, filings), each change with its
+      official source.
+  llm: >-
+    See what changed at a company, and when: versions with the fields that changed (address,
+    status), each with its official source. Use it for changes over time. Don't use it for the
+    current state: call lookup_company. Returns: versions newest first with source, fetched_at
+    and the fields changed; dated events where the source has them (BORME acts, Companies House
+    filings); meta.history_since says where history starts. Costs 1 unit. France: from
+    Fuentio's first fetch of the company. Spain: from 2 January 2009. United Kingdom: the latest
+    filings, and every change since Fuentio first held it.
+parameters:
+  - name: country
+    type: select
+    required: true
+    form: llm
+    label:
+      en_US: Country
+    human_description:
+      en_US: FR (France), GB (United Kingdom) or ES (Spain).
+    llm_description: "ISO country code: FR or GB or ES."
+    options:
+      - value: FR
+        label:
+          en_US: France
+      - value: GB
+        label:
+          en_US: United Kingdom
+      - value: ES
+        label:
+          en_US: Spain
+  - name: identifier
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Official ID
+    human_description:
+      en_US: SIREN, SIRET or VAT (France), company number (UK), Registro Mercantil sheet (Spain).
+    llm_description: Official ID, as for lookup_company. Never a name.
+  - name: id_scheme
+    type: select
+    required: false
+    form: llm
+    label:
+      en_US: ID type
+    human_description:
+      en_US: Optional. Force the ID type when it is ambiguous.
+    llm_description: Optional. Force the ID type when it is ambiguous.
+    options:
+      - value: FR_SIREN
+        label:
+          en_US: SIREN (France)
+      - value: FR_SIRET
+        label:
+          en_US: SIRET (France)
+      - value: EU_VAT
+        label:
+          en_US: EU VAT number (France)
+      - value: LEI
+        label:
+          en_US: LEI
+      - value: GB_COMPANY_NUMBER
+        label:
+          en_US: Company number (UK)
+      - value: ES_RM_HOJA
+        label:
+          en_US: Registro Mercantil sheet (Spain)
+  - name: page
+    type: number
+    required: false
+    form: llm
+    default: 1
+    min: 1
+    label:
+      en_US: Page
+    human_description:
+      en_US: Versions page, 10 per page.
+    llm_description: Versions page, 10 per page.
+extra:
+  python:
+    source: tools/get_company_history.py

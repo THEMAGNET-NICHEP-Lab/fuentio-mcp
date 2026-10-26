@@ -1,0 +1,106 @@
+identity:
+  name: search_companies
+  author: fuentio
+  label:
+    en_US: Search companies by name
+description:
+  human:
+    en_US: Find companies by name in the official registers of France, the United Kingdom and
+      Spain, 10 per page, best match first.
+  llm: >-
+    Find companies by name in the official registers of France, Spain and the United Kingdom,
+    10 per page. Use it when you know a name but no ID, then call lookup_company or
+    verify_company with an ID from the results. Don't use it when you already have an official
+    ID. Returns: best match first, each with match.score (0-1) and reasons, name, status,
+    address, IDs, provenance; meta.next_page. Costs 2 units a page. France: insolvency from
+    BODACC since 2008. Spain: BORME acts since 2 January 2009; no NIF/CIF lookup, search by name.
+    UK: no officers or PSCs. No person's name in any answer.
+parameters:
+  - name: country
+    type: select
+    required: true
+    form: llm
+    label:
+      en_US: Country
+    human_description:
+      en_US: FR (France), GB (United Kingdom) or ES (Spain).
+    llm_description: "ISO country code: FR or GB or ES."
+    options:
+      - value: FR
+        label:
+          en_US: France
+      - value: GB
+        label:
+          en_US: United Kingdom
+      - value: ES
+        label:
+          en_US: Spain
+  - name: query
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Company name
+    human_description:
+      en_US: The company's name, 2 to 200 characters.
+    llm_description: Company name, 2 to 200 characters (e.g. 'telefonica').
+  - name: postal_code
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Postal code
+    human_description:
+      en_US: Optional registered-office postal code.
+    llm_description: Optional registered-office postal code filter.
+  - name: locality
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Town (Spain)
+    human_description:
+      en_US: Optional registered-office town (Spain).
+    llm_description: Optional registered-office town filter (Spain).
+  - name: status
+    type: select
+    required: false
+    form: llm
+    label:
+      en_US: Status
+    human_description:
+      en_US: Only companies with this status.
+    llm_description: Optional. Only companies with this status.
+    options:
+      - value: active
+        label:
+          en_US: Active
+      - value: inactive
+        label:
+          en_US: Inactive
+      - value: in_liquidation
+        label:
+          en_US: In liquidation
+      - value: dissolved
+        label:
+          en_US: Dissolved
+      - value: struck_off
+        label:
+          en_US: Struck off
+      - value: unknown
+        label:
+          en_US: Unknown
+  - name: page
+    type: number
+    required: false
+    form: llm
+    default: 1
+    min: 1
+    label:
+      en_US: Page
+    human_description:
+      en_US: Results page, 10 per page.
+    llm_description: Results page, 10 per page (meta.next_page in an answer gives the next one).
+extra:
+  python:
+    source: tools/search_companies.py

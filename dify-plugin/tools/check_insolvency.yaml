@@ -1,0 +1,63 @@
+identity:
+  name: check_insolvency
+  author: fuentio
+  label:
+    en_US: Insolvency notices and state of a company
+description:
+  human:
+    en_US: A company's insolvency notices and state, from BODACC (France) and BORME insolvency
+      acts (Spain).
+  llm: >-
+    Check a company's insolvency notices and state: France from BODACC (safeguard,
+    reorganisation, liquidation, plans, closures), Spain from BORME insolvency acts. Use it for
+    credit or supplier checks. It is not a sanctions check. Inputs: country and identifier, as
+    lookup_company (e.g. 'FR', '441639465'). Returns: state (in_procedure, under_plan, closed,
+    notice_found, none_found, not_covered), procedure, dates, notices with official citations,
+    covered_since. Costs 1 unit. No notice outside the loaded years is not proof of no
+    procedure.
+parameters:
+  - name: country
+    type: select
+    required: true
+    form: llm
+    label:
+      en_US: Country
+    human_description:
+      en_US: FR (France), GB (United Kingdom) or ES (Spain).
+    llm_description: "ISO country code: FR or GB or ES."
+    options:
+      - value: FR
+        label:
+          en_US: France
+      - value: GB
+        label:
+          en_US: United Kingdom
+      - value: ES
+        label:
+          en_US: Spain
+  - name: identifier
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Official ID
+    human_description:
+      en_US: SIREN, SIRET or VAT (France), company number (UK), Registro Mercantil sheet (Spain).
+    llm_description: >-
+      Official ID, as lookup_company: FR SIREN (9 digits), SIRET or VAT; ES Registro Mercantil
+      sheet, e.g. VI-23266; GB Companies House company number, e.g. 00445790.
+output_schema:
+  type: object
+  properties:
+    state:
+      type: string
+      description: in_procedure, under_plan, closed, notice_found, none_found or not_covered.
+    procedure:
+      type: string
+      description: The procedure, when there is one.
+    covered_since:
+      type: string
+      description: The first date the notices cover.
+extra:
+  python:
+    source: tools/check_insolvency.py
